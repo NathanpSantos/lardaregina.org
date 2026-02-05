@@ -1,0 +1,22 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.env
+.env.*
+venv/
+virtualenv/
+instance/
+
+# Flask
+*.log
+*.sqlite3
+
+# cPanel / deploy
+passenger_wsgi.py
+
+# IDE
+.vscode/
+.idea/
+.DS_Store

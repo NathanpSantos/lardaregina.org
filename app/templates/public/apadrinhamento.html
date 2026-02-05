@@ -1,0 +1,383 @@
+{% extends "base.html" %}
+{% block content %}
+
+<section class="animals-page container">
+  <h1 class="page-title">Conheça os animais</h1>
+
+  <div class="animals-layout">
+    <!-- Sidebar filtros -->
+    <aside class="filters card">
+      <div class="filters__header">
+        <strong>Filtros</strong>
+        <button type="button" class="filters__clear" id="clearFilters">Limpar</button>
+      </div>
+
+      <label class="search">
+        <span>Buscar por nome</span>
+        <input id="searchName" type="text" placeholder="Ex: Stelar, Mel, Jade..." />
+      </label>
+
+      <div class="filter-block">
+        <h3>Animais</h3>
+        <label><input type="checkbox" class="f-type" value="Cão"> Cães</label>
+        <label><input type="checkbox" class="f-type" value="Gato"> Gatos</label>
+      </div>
+
+      <div class="filter-block">
+        <h3>Sexo</h3>
+        <label><input type="checkbox" class="f-sexo" value="Fêmea"> Fêmea</label>
+        <label><input type="checkbox" class="f-sexo" value="Macho"> Macho</label>
+      </div>
+
+      <div class="filter-block">
+        <h3>Porte</h3>
+        <label><input type="checkbox" class="f-porte" value="P"> P (até 10kg)</label>
+        <label><input type="checkbox" class="f-porte" value="M"> M (até 25kg)</label>
+        <label><input type="checkbox" class="f-porte" value="G"> G (mais de 25kg)</label>
+      </div>
+
+      <div class="filter-block">
+        <h3>Idade</h3>
+        <label><input type="checkbox" class="f-idade" value="Menos de 6 meses"> Menos de 6 meses</label>
+        <label><input type="checkbox" class="f-idade" value="Até 5 anos"> Até 5 anos</label>
+        <label><input type="checkbox" class="f-idade" value="Até 10 anos"> Até 10 anos</label>
+        <label><input type="checkbox" class="f-idade" value="Mais de 10 anos"> Mais de 10 anos</label>
+      </div>
+    </aside>
+
+    <!-- Grid -->
+    <main class="animals-grid" id="animalsGrid">
+      {% for a in animais %}
+      <article
+        class="animal-card card"
+        tabindex="0"
+        data-nome="{{ a.nome|lower }}"
+        data-tipo="{{ a.tipo }}"
+        data-sexo="{{ a.sexo }}"
+        data-porte="{{ a.porte }}"
+        data-idade="{{ a.idade }}"
+        data-foto="{{ url_for('static', filename=a.foto) }}"
+        data-desc="{{ a.descricao }}"
+        data-total="{{ a.total }}"
+        data-status="{{ a.status }}"
+        data-pix="{{ ong.pix }}"
+      >
+        <img class="animal-card__img" src="{{ url_for('static', filename=a.foto) }}" alt="{{ a.nome }}">
+        <div class="animal-card__body">
+          <h2 class="animal-card__title">Apadrinhe {{ a.nome }}</h2>
+          <div class="animal-card__meta">
+            <span>{{ a.sexo }}</span>
+            <span>•</span>
+            <span>{{ a.tipo }}</span>
+            <span>•</span>
+            <span>{{ a.idade }}</span>
+          </div>
+          <div class="animal-card__row">
+            <span class="tag">{{ a.status }}</span>
+            <button type="button" class="btn btn--small btn--teal">Conheça minha história</button>
+          </div>
+        </div>
+
+        <!-- custos escondidos para o modal -->
+        <ul class="is-hidden" data-costs>
+          {% for c in a.custos %}
+            <li>{{ c }}</li>
+          {% endfor %}
+        </ul>
+      </article>
+      {% endfor %}
+    </main>
+  </div>
+</section>
+
+<!-- Modal -->
+<div class="modal" id="animalModal" aria-hidden="true">
+  <div class="modal__backdrop" data-close></div>
+
+  <div class="modal__content card">
+    <button class="modal__close" type="button" data-close>✕</button>
+
+    <div class="modal__grid">
+      <div class="modal__media">
+        <img id="mFoto" alt="" />
+      </div>
+
+      <div class="modal__info">
+        <h2 id="mNome" class="modal__title"></h2>
+        <div id="mMeta" class="modal__meta"></div>
+
+        <p id="mDesc" class="modal__desc muted"></p>
+
+        <div class="modal__box card card--soft">
+          <strong>Custos mensais</strong>
+          <ul id="mCustos" class="modal__list"></ul>
+          <div class="modal__total" id="mTotal"></div>
+        </div>
+
+        <div class="modal__cta">
+          <a class="btn" href="{{ url_for('public.doacao') }}">Quero apadrinhar</a>
+          <button class="btn btn--ghost" type="button" id="copyPixBtn">Copiar Pix</button>
+        </div>
+
+        <div class="muted" style="margin-top:10px;">
+          Pix (CNPJ): <strong id="mPix"></strong>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+(function(){
+  const grid = document.getElementById('animalsGrid');
+  const search = document.getElementById('searchName');
+  const clearBtn = document.getElementById('clearFilters');
+
+  const modal = document.getElementById('animalModal');
+  const mFoto = document.getElementById('mFoto');
+  const mNome = document.getElementById('mNome');
+  const mMeta = document.getElementById('mMeta');
+  const mDesc = document.getElementById('mDesc');
+  const mCustos = document.getElementById('mCustos');
+  const mTotal = document.getElementById('mTotal');
+  const mPix = document.getElementById('mPix');
+  const copyPixBtn = document.getElementById('copyPixBtn');
+
+  let currentPix = "";
+
+  function selectedValues(selector){
+    return [...document.querySelectorAll(selector + ':checked')].map(i => i.value);
+  }
+
+  function applyFilters(){
+    const name = (search.value || '').trim().toLowerCase();
+    const tipos = selectedValues('.f-type');
+    const sexos = selectedValues('.f-sexo');
+    const portes = selectedValues('.f-porte');
+    const idades = selectedValues('.f-idade');
+
+    [...grid.querySelectorAll('.animal-card')].forEach(card => {
+      const okName = !name || card.dataset.nome.includes(name);
+      const okTipo = !tipos.length || tipos.includes(card.dataset.tipo);
+      const okSexo = !sexos.length || sexos.includes(card.dataset.sexo);
+      const okPorte = !portes.length || portes.includes(card.dataset.porte);
+      const okIdade = !idades.length || idades.includes(card.dataset.idade);
+
+      card.style.display = (okName && okTipo && okSexo && okPorte && okIdade) ? '' : 'none';
+    });
+  }
+
+  function openModal(card){
+    mFoto.src = card.dataset.foto;
+    mFoto.alt = card.dataset.nome;
+    mNome.textContent = `Apadrinhe ${card.dataset.nome}`;
+    mMeta.textContent = `${card.dataset.sexo} • ${card.dataset.tipo} • ${card.dataset.idade} • Porte ${card.dataset.porte}`;
+    mDesc.textContent = card.dataset.desc || '';
+
+    mCustos.innerHTML = '';
+    const ul = card.querySelector('[data-costs]');
+    if (ul){
+      [...ul.querySelectorAll('li')].forEach(li => {
+        const item = document.createElement('li');
+        item.textContent = li.textContent;
+        mCustos.appendChild(item);
+      });
+    }
+
+    mTotal.textContent = `TOTAL: ${card.dataset.total || ''}`;
+    currentPix = card.dataset.pix || '';
+    mPix.textContent = currentPix;
+
+    modal.classList.add('is-open');
+    modal.setAttribute('aria-hidden','false');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeModal(){
+    modal.classList.remove('is-open');
+    modal.setAttribute('aria-hidden','true');
+    document.body.style.overflow = '';
+  }
+
+  // eventos filtros
+  document.addEventListener('change', (e) => {
+    if (e.target.matches('.f-type, .f-sexo, .f-porte, .f-idade')) applyFilters();
+  });
+  search.addEventListener('input', applyFilters);
+
+  clearBtn.addEventListener('click', () => {
+    document.querySelectorAll('.filters input[type="checkbox"]').forEach(i => i.checked = false);
+    search.value = '';
+    applyFilters();
+  });
+
+  // abrir modal clicando no card/botão
+  grid.addEventListener('click', (e) => {
+    const card = e.target.closest('.animal-card');
+    if (!card) return;
+    openModal(card);
+  });
+  grid.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter'){
+      const card = e.target.closest('.animal-card');
+      if (card) openModal(card);
+    }
+  });
+
+  // fechar modal
+  modal.addEventListener('click', (e) => {
+    if (e.target.hasAttribute('data-close')) closeModal();
+  });
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && modal.classList.contains('is-open')) closeModal();
+  });
+
+  // copiar pix
+  copyPixBtn.addEventListener('click', async () => {
+    try{
+      await navigator.clipboard.writeText(currentPix);
+      copyPixBtn.textContent = "Pix copiado ✅";
+      setTimeout(()=> copyPixBtn.textContent = "Copiar Pix", 1600);
+    }catch(err){
+      alert("Não consegui copiar automaticamente. Pix: " + currentPix);
+    }
+  });
+
+  applyFilters();
+})();
+</script>
+
+
+<section class="sponsor-page">
+  <div class="container sponsor-wrap">
+
+    <header class="sponsor-head">
+      <h1>Apadrinhe um animal 🐾</h1>
+      <p class="muted">
+        O apadrinhamento ajuda a manter ração, medicamentos e cuidados veterinários.
+        Você escolhe um valor mensal e acompanha nosso trabalho de perto.
+      </p>
+    </header>
+
+    <div class="sponsor-grid">
+      <!-- Como funciona -->
+      <div class="card sponsor-card">
+        <h2>Como funciona</h2>
+        <ol class="sponsor-steps">
+          <li>Você escolhe um valor mensal (ou avulso).</li>
+          <li>Faz a doação via Pix (CNPJ) ou como preferir.</li>
+          <li>Envia o comprovante no WhatsApp.</li>
+          <li>A gente te confirma e te mantém atualizado(a) sobre os animais.</li>
+        </ol>
+
+        <div class="pix-row">
+          <input id="pixKeySponsor" class="pix-input" value="{{ ong.pix }}" readonly>
+          <button class="btn btn--copy" type="button" id="btnCopyPixSponsor">Copiar Pix</button>
+        </div>
+
+        <p id="copyMsgSponsor" class="copy-msg" aria-live="polite"></p>
+      </div>
+
+      <!-- Planos -->
+      <div class="card sponsor-card sponsor-plans">
+        <h2>Valores sugeridos</h2>
+
+        <div class="plans">
+          {% for p in planos %}
+            <div class="plan">
+              <strong>{{ p.titulo }}</strong>
+              <span class="muted">{{ p.desc }}</span>
+            </div>
+          {% endfor %}
+        </div>
+
+        <div class="muted" style="margin-top:10px;">
+          * Você pode escolher qualquer valor. Toda ajuda faz diferença.
+        </div>
+      </div>
+    </div>
+
+    <!-- Form rápido -->
+    <div class="card sponsor-contact">
+      <h2>Quero apadrinhar</h2>
+      <p class="muted">
+        Preencha abaixo e clique em “Enviar no WhatsApp”. A mensagem vai pronta.
+      </p>
+
+      <form class="sponsor-form" onsubmit="return false;">
+        <div class="field">
+          <label>Seu nome</label>
+          <input id="spName" type="text" placeholder="Ex: Maria Silva">
+        </div>
+
+        <div class="field">
+          <label>Valor que deseja apadrinhar</label>
+          <input id="spValue" type="text" placeholder="Ex: R$ 50/mês">
+        </div>
+
+        <div class="field">
+          <label>Preferência (opcional)</label>
+          <input id="spPref" type="text" placeholder="Ex: quero apadrinhar um cão em tratamento">
+        </div>
+
+        <div class="actions">
+          <a class="btn" id="btnWhatsSponsor" target="_blank" rel="noopener">
+            Enviar no WhatsApp
+          </a>
+          <a class="btn btn--ghost" href="{{ url_for('public.doacao') }}">
+            Ir para Doação (QR Code)
+          </a>
+        </div>
+      </form>
+    </div>
+
+  </div>
+</section>
+
+<script>
+  // Copiar Pix
+  const btnCopy = document.getElementById("btnCopyPixSponsor");
+  const pix = document.getElementById("pixKeySponsor");
+  const msg = document.getElementById("copyMsgSponsor");
+
+  btnCopy?.addEventListener("click", async () => {
+    try {
+      await navigator.clipboard.writeText(pix.value);
+      msg.textContent = "Chave Pix copiada! ✅";
+      setTimeout(() => msg.textContent = "", 2500);
+    } catch (e) {
+      pix.select();
+      document.execCommand("copy");
+      msg.textContent = "Chave Pix copiada! ✅";
+      setTimeout(() => msg.textContent = "", 2500);
+    }
+  });
+
+  // WhatsApp com mensagem pronta
+  const wpp = "{{ ong.whatsapp }}";
+  const name = document.getElementById("spName");
+  const value = document.getElementById("spValue");
+  const pref = document.getElementById("spPref");
+  const btnWpp = document.getElementById("btnWhatsSponsor");
+
+  function buildMsg(){
+    const n = name.value.trim() || "Olá";
+    const v = value.value.trim() || "um valor mensal";
+    const p = pref.value.trim();
+
+    let text = `Olá! Meu nome é ${n}. Quero apadrinhar o Lar da Regina com ${v}.`;
+    if (p) text += ` Preferência: ${p}.`;
+    text += ` Qual o próximo passo?`;
+
+    return encodeURIComponent(text);
+  }
+
+  function updateLink(){
+    btnWpp.href = `https://wa.me/5511976187227${wpp}?text=${buildMsg()}`;
+  }
+
+  [name, value, pref].forEach(el => el.addEventListener("input", updateLink));
+  updateLink();
+</script>
+
+{% endblock %}

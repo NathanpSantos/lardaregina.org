@@ -1,0 +1,132 @@
+{% extends "base.html" %}
+{% block content %}
+
+<section class="animals-page container">
+  <h1 class="page-title">Conheça os animais</h1>
+
+  <div class="animals-layout">
+
+    <aside class="filters card">
+      <div class="filters__header">
+        <strong>Filtros</strong>
+        <button type="button" class="filters__clear" id="clearFilters">Limpar</button>
+      </div>
+
+      <label class="search">
+        <span>Buscar por nome</span>
+        <input id="searchName" type="text" placeholder="Ex: Stelar, Mel..." />
+      </label>
+
+      <div class="filter-block">
+        <h3>Animais</h3>
+        <label><input type="checkbox" class="f-type" value="Cão"> Cães</label>
+        <label><input type="checkbox" class="f-type" value="Gato"> Gatos</label>
+        <label><input type="checkbox" class="f-type" value="Cavalo"> Cavalos</label>
+      </div>
+
+      <div class="filter-block">
+        <h3>Sexo</h3>
+        <label><input type="checkbox" class="f-sexo" value="Fêmea"> Fêmea</label>
+        <label><input type="checkbox" class="f-sexo" value="Macho"> Macho</label>
+      </div>
+
+      <div class="filter-block">
+        <h3>Porte</h3>
+        <label><input type="checkbox" class="f-porte" value="P"> P</label>
+        <label><input type="checkbox" class="f-porte" value="M"> M</label>
+        <label><input type="checkbox" class="f-porte" value="G"> G</label>
+      </div>
+
+      <div class="filter-block">
+        <h3>Idade</h3>
+        <label><input type="checkbox" class="f-idade" value="Menos de 6 meses"> Menos de 6 meses</label>
+        <label><input type="checkbox" class="f-idade" value="Até 5 anos"> Até 5 anos</label>
+        <label><input type="checkbox" class="f-idade" value="Até 10 anos"> Até 10 anos</label>
+        <label><input type="checkbox" class="f-idade" value="Mais de 10 anos"> Mais de 10 anos</label>
+      </div>
+    </aside>
+
+    <main class="animals-grid" id="animalsGrid">
+      {% for a in animais %}
+      <article
+        class="animal-card card"
+        data-nome="{{ a.nome|lower }}"
+        data-tipo="{{ a.tipo }}"
+        data-sexo="{{ a.sexo }}"
+        data-porte="{{ a.porte }}"
+        data-idade="{{ a.idade }}"
+      >
+        <a class="animal-link" href="{{ url_for('public.apadrinhamento_detalhe', slug=a.slug) }}">
+          <img class="animal-card__img" src="{{ url_for('static', filename=a.foto) }}" alt="{{ a.nome }}">
+        </a>
+
+        <div class="animal-card__body">
+          <h2 class="animal-card__title">
+            <a class="animal-link" href="{{ url_for('public.apadrinhamento_detalhe', slug=a.slug) }}">
+              Apadrinhe {{ a.nome }}
+            </a>
+          </h2>
+
+          <div class="animal-card__meta">
+            <span>{{ a.sexo }}</span><span>•</span>
+            <span>{{ a.tipo }}</span><span>•</span>
+            <span>{{ a.idade }}</span>
+          </div>
+
+          <div class="animal-card__row">
+            <span class="tag">{{ a.status }}</span>
+            <a class="btn btn--small btn--teal" href="{{ url_for('public.apadrinhamento_detalhe', slug=a.slug) }}">
+              Conheça minha história
+            </a>
+          </div>
+        </div>
+      </article>
+      {% endfor %}
+    </main>
+
+  </div>
+</section>
+
+<script>
+(function(){
+  const grid = document.getElementById('animalsGrid');
+  const search = document.getElementById('searchName');
+  const clearBtn = document.getElementById('clearFilters');
+
+  function selectedValues(selector){
+    return [...document.querySelectorAll(selector + ':checked')].map(i => i.value);
+  }
+
+  function applyFilters(){
+    const name = (search.value || '').trim().toLowerCase();
+    const tipos = selectedValues('.f-type');
+    const sexos = selectedValues('.f-sexo');
+    const portes = selectedValues('.f-porte');
+    const idades = selectedValues('.f-idade');
+
+    [...grid.querySelectorAll('.animal-card')].forEach(card => {
+      const okName = !name || card.dataset.nome.includes(name);
+      const okTipo = !tipos.length || tipos.includes(card.dataset.tipo);
+      const okSexo = !sexos.length || sexos.includes(card.dataset.sexo);
+      const okPorte = !portes.length || portes.includes(card.dataset.porte);
+      const okIdade = !idades.length || idades.includes(card.dataset.idade);
+      card.style.display = (okName && okTipo && okSexo && okPorte && okIdade) ? '' : 'none';
+    });
+  }
+
+  document.addEventListener('change', (e) => {
+    if (e.target.matches('.f-type, .f-sexo, .f-porte, .f-idade')) applyFilters();
+  });
+  search.addEventListener('input', applyFilters);
+
+  clearBtn.addEventListener('click', () => {
+    document.querySelectorAll('.filters input[type="checkbox"]').forEach(i => i.checked = false);
+    search.value = '';
+    applyFilters();
+  });
+
+  applyFilters();
+})();
+</script>
+
+{% endblock %}
