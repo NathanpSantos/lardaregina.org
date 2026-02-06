@@ -1,83 +1,55 @@
-<<<<<<< HEAD
-def _tlv(tag: str, value: str) -> str:
-    length = str(len(value)).zfill(2)
-    return f"{tag}{length}{value}"
+import re
+import crcmod
+
+def _sanitize(txt: str) -> str:
+    txt = txt.strip()
+    # remove caracteres que podem quebrar padrão
+    return re.sub(r"\s+", " ", txt)
+
+def _emv(id_: str, value: str) -> str:
+    value = "" if value is None else str(value)
+    return f"{id_}{len(value):02d}{value}"
 
 def _crc16(payload: str) -> str:
-    # CRC-16/CCITT-FALSE
-    poly = 0x1021
-    crc = 0xFFFF
-    for ch in payload:
-        crc ^= (ord(ch) << 8)
-        for _ in range(8):
-            crc = ((crc << 1) ^ poly) if (crc & 0x8000) else (crc << 1)
-            crc &= 0xFFFF
+    crc16_func = crcmod.predefined.mkCrcFun("crc-ccitt-false")
+    crc = crc16_func(payload.encode("utf-8"))
     return f"{crc:04X}"
 
-def gerar_payload_pix(chave: str, nome: str, cidade: str, valor: str | None = None) -> str:
-    # Nome até 25 e cidade até 15 (padrão EMV)
-    nome = (nome or "LAR DA REGINA")[:25]
-    cidade = (cidade or "GUARULHOS")[:15]
+def gerar_payload_pix(chave: str, nome: str, cidade: str, valor=None, txid="***") -> str:
+    """
+    Gera payload PIX (copia e cola) padrão EMV.
+    valor=None -> doação livre.
+    """
+    chave = _sanitize(chave)
+    nome = _sanitize(nome)[:25]
+    cidade = _sanitize(cidade)[:15]
+    txid = _sanitize(txid)[:25] or "***"
 
-    gui = _tlv("00", "br.gov.bcb.pix")
-    key = _tlv("01", chave)
-    merchant_account = _tlv("26", gui + key)
-
-    payload = ""
-    payload += _tlv("00", "01")          # Payload Format Indicator
-    payload += _tlv("01", "12")          # Point of Initiation Method (dinâmico)
-    payload += merchant_account
-    payload += _tlv("52", "0000")        # MCC
-    payload += _tlv("53", "986")         # BRL
-    if valor:
-        payload += _tlv("54", valor)     # Valor opcional (ex: "25.00")
-    payload += _tlv("58", "BR")
-    payload += _tlv("59", nome)
-    payload += _tlv("60", cidade)
-    payload += _tlv("62", _tlv("05", "***"))  # Additional Data Field Template
-
-    payload_crc = payload + "6304"
-    crc = _crc16(payload_crc)
-    return payload_crc + crc
-=======
-def _tlv(tag: str, value: str) -> str:
-    length = str(len(value)).zfill(2)
-    return f"{tag}{length}{value}"
-
-def _crc16(payload: str) -> str:
-    # CRC-16/CCITT-FALSE
-    poly = 0x1021
-    crc = 0xFFFF
-    for ch in payload:
-        crc ^= (ord(ch) << 8)
-        for _ in range(8):
-            crc = ((crc << 1) ^ poly) if (crc & 0x8000) else (crc << 1)
-            crc &= 0xFFFF
-    return f"{crc:04X}"
-
-def gerar_payload_pix(chave: str, nome: str, cidade: str, valor: str | None = None) -> str:
-    # Nome até 25 e cidade até 15 (padrão EMV)
-    nome = (nome or "LAR DA REGINA")[:25]
-    cidade = (cidade or "GUARULHOS")[:15]
-
-    gui = _tlv("00", "br.gov.bcb.pix")
-    key = _tlv("01", chave)
-    merchant_account = _tlv("26", gui + key)
+    # Merchant Account Information (GUI + chave)
+    mai = (
+        _emv("00", "BR.GOV.BCB.PIX") +
+        _emv("01", chave)
+    )
+    mai = _emv("26", mai)
 
     payload = ""
-    payload += _tlv("00", "01")          # Payload Format Indicator
-    payload += _tlv("01", "12")          # Point of Initiation Method (dinâmico)
-    payload += merchant_account
-    payload += _tlv("52", "0000")        # MCC
-    payload += _tlv("53", "986")         # BRL
-    if valor:
-        payload += _tlv("54", valor)     # Valor opcional (ex: "25.00")
-    payload += _tlv("58", "BR")
-    payload += _tlv("59", nome)
-    payload += _tlv("60", cidade)
-    payload += _tlv("62", _tlv("05", "***"))  # Additional Data Field Template
+    payload += _emv("00", "01")          # Payload Format Indicator
+    payload += _emv("01", "12")          # Point of Initiation Method (12 = dinâmico / pode ser estático tb)
+    payload += mai
+    payload += _emv("52", "0000")        # Merchant Category Code
+    payload += _emv("53", "986")         # BRL
+    if valor is not None and str(valor).strip() != "":
+        payload += _emv("54", f"{float(valor):.2f}")  # Transaction Amount
+    payload += _emv("58", "BR")          # Country Code
+    payload += _emv("59", nome)          # Merchant Name
+    payload += _emv("60", cidade)        # Merchant City
 
-    payload_crc = payload + "6304"
-    crc = _crc16(payload_crc)
-    return payload_crc + crc
->>>>>>> 821acfce0df8476ea6d7009ab01ba996be0d033d
+    # Additional Data Field Template (TXID)
+    adft = _emv("05", txid)
+    payload += _emv("62", adft)
+
+    # CRC16
+    payload_sem_crc = payload + "6304"
+    payload += _emv("63", _crc16(payload_sem_crc))
+
+    return payload
