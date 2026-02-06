@@ -1,9 +1,7 @@
-<<<<<<< HEAD
 Flask==3.0.0
 python-dotenv==1.0.1
 qrcode[pil]==7.4.2
-=======
 Flask==3.0.0
 python-dotenv==1.0.1
 qrcode[pil]==7.4.2
->>>>>>> 821acfce0df8476ea6d7009ab01ba996be0d033d
+
