@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 {% extends "base.html" %}
 {% block content %}
 <h1>Transparência</h1>
@@ -25,31 +24,4 @@
   {% endfor %}
 </div>
 {% endblock %}
-=======
-{% extends "base.html" %}
-{% block content %}
-<h1>Transparência</h1>
-<p class="muted">
-  Prestação de contas do Lar da Regina — CNPJ: <strong>18.294.547/0001-02</strong>.
-  Aqui você encontra relatórios mensais em PDF. Em breve, esta área será automatizada pelo sistema financeiro.
-</p>
 
-<div class="grid">
-  {% for r in relatorios %}
-    <div class="card card--soft">
-      <h2 style="margin-top:0;">{{ r.mes }}</h2>
-      <p class="muted">{{ r.resumo }}</p>
-
-      {% if r.arquivo %}
-        <a class="btn btn--ghost" target="_blank" rel="noopener"
-           href="{{ url_for('static', filename='relatorios/' ~ r.arquivo) }}">
-          Baixar PDF
-        </a>
-      {% else %}
-        <p class="muted">PDF ainda não publicado.</p>
-      {% endif %}
-    </div>
-  {% endfor %}
-</div>
-{% endblock %}
->>>>>>> 821acfce0df8476ea6d7009ab01ba996be0d033d
