@@ -8,7 +8,7 @@ def create_app():
     from .public import public_bp
     from .system import system_bp
 
-    app.register_blueprint(public_bp)                 # /
+    app.register_blueprint(public_bp)                
     app.register_blueprint(system_bp, url_prefix="/sistema")
 
     return app
