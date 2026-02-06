@@ -1,1 +1,3 @@
-from run import app  # ou de onde estiver seu app
+from app import create_app
+
+app = create_app()
