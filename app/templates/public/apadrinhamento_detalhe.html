@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 {% extends "base.html" %}
 {% block content %}
 
@@ -135,3 +136,142 @@ Link do animal: ${link}`;
 
 
 {% endblock %}
+=======
+{% extends "base.html" %}
+{% block content %}
+
+<section class="animal-detail container">
+
+  <header class="detail-head">
+    <h1>Apadrinhe a {{ animal.nome }}</h1>
+    <p class="muted">
+      {{ animal.sexo }} • {{ animal.tipo }} • Porte {{ animal.porte }} • {{ animal.idade }}
+    </p>
+  </header>
+
+  <div class="detail-grid">
+
+    <!-- Galeria -->
+    <div class="detail-gallery card">
+      <img id="mainPhoto" class="detail-main" src="{{ url_for('static', filename=animal.galeria[0]) }}" alt="{{ animal.nome }}">
+
+      <div class="detail-thumbs">
+        {% for img in animal.galeria %}
+          <button type="button" class="thumb" data-src="{{ url_for('static', filename=img) }}">
+            <img src="{{ url_for('static', filename=img) }}" alt="{{ animal.nome }}">
+          </button>
+        {% endfor %}
+      </div>
+    </div>
+
+    <!-- Texto + custos -->
+    <div class="detail-info card">
+      <h2>Oi, eu sou a {{ animal.nome }}.</h2>
+      <p class="muted">{{ animal.descricao }}</p>
+
+      <div class="detail-box card card--soft">
+        <strong>Custos mensais</strong>
+        <ul class="detail-list">
+          {% for c in animal.custos %}
+            <li>{{ c }}</li>
+          {% endfor %}
+        </ul>
+
+        <div class="detail-total">TOTAL: {{ animal.total }}</div>
+      </div>
+
+      <div class="detail-cta">
+        <a class="btn" target="_blank" rel="noopener"
+          href="https://wa.me/{{ ong.whatsapp }}?text={{ (
+            'Olá! Quero apadrinhar a/o ' ~ animal.nome ~
+            ' (' ~ animal.tipo ~ ', ' ~ animal.sexo ~ ', porte ' ~ animal.porte ~ ', ' ~ animal.idade ~ ').%0A%0A' ~
+            'Valor sugerido: ' ~ animal.total ~ '.%0A' ~
+            'Pix (CNPJ): ' ~ ong.pix ~ '.%0A%0A' ~
+            'Link do animal: ' ~ request.url
+          )|urlencode }}">
+          Quero apadrinhar (WhatsApp)
+        </a>
+        <a class="btn btn--ghost" target="_blank" rel="noopener"
+           href="https://wa.me/{{ ong.whatsapp }}?text={{ ('Olá! Quero apadrinhar a ' ~ animal.nome ~ '. Como faço?')|urlencode }}">
+          Falar no WhatsApp
+        </a>
+      </div>
+
+      <p class="muted" style="margin-top:10px;">
+        Pix (CNPJ): <strong>{{ ong.pix }}</strong>
+      </p>
+    </div>
+    <div class="card card--soft" style="margin-top:12px;">
+      <strong>Observação (opcional)</strong>
+      <input id="obs" type="text" placeholder="Ex: posso doar todo dia 10 / quero receber retorno do caso"
+            style="width:100%; margin-top:10px; padding:10px 12px; border-radius:12px; border:1px solid var(--border);">
+    </div>
+
+    <div class="detail-cta">
+      <a class="btn" id="btnWpp" target="_blank" rel="noopener">Quero apadrinhar (WhatsApp)</a>
+      <a class="btn btn--ghost" href="{{ url_for('public.apadrinhamento_lista') }}">Voltar</a>
+    </div>
+
+  </div>
+
+  <!-- Veja também -->
+  <section class="see-more">
+    <h2>Veja também:</h2>
+
+    <div class="animals__grid">
+      {% for a in sugestoes %}
+        <div class="card animal">
+          <a href="{{ url_for('public.apadrinhamento_detalhe', slug=a.slug) }}">
+            <img class="animal__img" src="{{ url_for('static', filename=a.foto) }}" alt="{{ a.nome }}">
+          </a>
+          <div class="animal__body">
+            <strong style="font-size:18px;">Apadrinhe {{ a.nome }}</strong>
+            <p class="muted">{{ a.sexo }}...</p>
+            <a class="btn btn--small btn--teal" href="{{ url_for('public.apadrinhamento_detalhe', slug=a.slug) }}">
+              Conheça minha história
+            </a>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  </section>
+
+</section>
+
+<script>
+  const wpp = "{{ ong.whatsapp }}";
+  const animalNome = "{{ animal.nome }}";
+  const animalTipo = "{{ animal.tipo }}";
+  const animalSexo = "{{ animal.sexo }}";
+  const animalPorte = "{{ animal.porte }}";
+  const animalIdade = "{{ animal.idade }}";
+  const total = "{{ animal.total }}";
+  const pix = "{{ ong.pix }}";
+  const link = "{{ request.url }}";
+
+  const obs = document.getElementById("obs");
+  const btn = document.getElementById("btnWpp");
+
+  function build(){
+    let msg =
+`Olá! Quero apadrinhar a/o ${animalNome} (${animalTipo}, ${animalSexo}, porte ${animalPorte}, ${animalIdade}).
+
+Valor sugerido: ${total}
+Pix (CNPJ): ${pix}
+
+Link do animal: ${link}`;
+
+    if (obs.value.trim()){
+      msg += `\n\nObservação: ${obs.value.trim()}`;
+    }
+
+    btn.href = `https://wa.me/${wpp}?text=${encodeURIComponent(msg)}`;
+  }
+
+  obs.addEventListener("input", build);
+  build();
+</script>
+
+
+{% endblock %}
+>>>>>>> 821acfce0df8476ea6d7009ab01ba996be0d033d

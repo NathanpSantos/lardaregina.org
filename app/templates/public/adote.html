@@ -212,3 +212,218 @@
 </script>
 
 {% endblock %}
+
+{% extends "base.html" %}
+{% block content %}
+
+<section class="adopt-page">
+  <div class="container adopt-wrap">
+
+    <!-- Cabeçalho -->
+    <header class="adopt-head">
+      <h1>Quero adotar 🐾</h1>
+      <p class="muted">
+        Adoção responsável muda vidas. Preencha o formulário ou clique em “Adotar” em um animal para falar com a ONG pelo WhatsApp.
+      </p>
+
+      <div class="adopt-cta">
+        <a class="btn" href="#lista">Ver animais</a>
+        <a class="btn btn--ghost" href="#form">Formulário de adoção</a>
+      </div>
+    </header>
+
+    <!-- Checklist -->
+    <div class="card adopt-checklist">
+      <h2>Checklist de adoção responsável ✅</h2>
+      <ul>
+        {% for item in checklist %}
+          <li>{{ item }}</li>
+        {% endfor %}
+      </ul>
+
+      <div class="muted" style="margin-top:10px;">
+        Se você concorda com esses pontos, você já está no caminho certo 💛
+      </div>
+    </div>
+
+    <!-- Lista de animais -->
+    <section id="lista" class="adopt-list">
+      <div class="card card--soft" style="margin-bottom:14px;">
+        <h2>Animais disponíveis</h2>
+        <p class="muted">
+          Alguns dos animais acolhidos pelo Lar da Regina. Em breve isso será automático pelo sistema.
+        </p>
+      </div>
+
+      <div class="adopt-layout">
+        <!-- SIDEBAR / FILTROS -->
+        <aside class="card adopt-filters">
+          <div class="filters__header">
+            <strong>Filtros</strong>
+            <button class="filters__clear" type="button" id="clearFilters">Limpar</button>
+          </div>
+
+          <div class="search">
+            <span>Buscar por nome</span>
+            <input id="filterName" type="text" placeholder="Ex: Jade, Mel...">
+          </div>
+
+          <div class="filter-block">
+            <h3>Status</h3>
+            <label><input type="checkbox" value="Para adoção" class="filterStatus"> Para adoção</label>
+            <label><input type="checkbox" value="Em tratamento" class="filterStatus"> Em tratamento</label>
+            <label><input type="checkbox" value="Resgatada" class="filterStatus"> Resgatada</label>
+          </div>
+
+          <div class="filter-block">
+            <h3>Tipo</h3>
+            <label><input type="checkbox" value="Cão" class="filterTipo"> Cães</label>
+            <label><input type="checkbox" value="Gato" class="filterTipo"> Gatos</label>
+          </div>
+        </aside>
+
+        <!-- GRID DE CARDS -->
+        <div class="adopt-grid" id="adoptGrid">
+          {% for a in animais %}
+            <article class="card adopt-card"
+                    data-nome="{{ a.nome|lower }}"
+                    data-status="{{ a.status }}"
+                    data-tipo="{{ a.tipo }}">
+              <img class="adopt-card__img"
+                  src="{{ url_for('static', filename=a.foto) }}"
+                  alt="{{ a.nome }}">
+
+              <div class="adopt-card__body">
+                <div class="adopt-card__top">
+                  <div>
+                    <h3 class="adopt-card__title">{{ a.nome }}</h3>
+                    <div class="adopt-card__meta">{{ a.tipo }}</div>
+                  </div>
+                  <span class="tag">{{ a.status }}</span>
+                </div>
+
+                <p class="muted adopt-card__hint">
+                  Para adotar, clique em “Adotar” e fale com a ONG no WhatsApp.
+                </p>
+
+                <div class="adopt-card__actions">
+                  <button class="btn btn--small"
+                          type="button"
+                          data-adotar
+                          data-nome="{{ a.nome }}"
+                          data-status="{{ a.status }}">
+                    Adotar {{ a.nome }}
+                  </button>
+
+                  <a class="btn btn--ghost btn--small"
+                    href="{{ url_for('public.apadrinhamento_lista') }}">
+                    Apadrinhar
+                  </a>
+                </div>
+              </div>
+            </article>
+          {% endfor %}
+        </div>
+      </div>
+    </section>
+
+
+    <!-- Formulário geral -->
+    <section id="form" class="card adopt-form">
+      <div class="adopt-form__head">
+        <h2>Formulário de adoção</h2>
+        <p class="muted">Preencha e clique em “Enviar no WhatsApp”. A mensagem vai pronta.</p>
+      </div>
+
+      <form class="adopt-form__grid" onsubmit="return false;">
+        <div class="field">
+          <label for="adName">Seu nome</label>
+          <input id="adName" type="text" placeholder="Ex: Maria Silva">
+        </div>
+
+        <div class="field">
+          <label for="adAnimal">Você quer adotar qual animal? <span class="muted">(opcional)</span></label>
+          <input id="adAnimal" type="text" placeholder="Ex: Jade">
+        </div>
+
+        <div class="field">
+          <label for="adCity">Cidade / Bairro</label>
+          <input id="adCity" type="text" placeholder="Ex: Guarulhos - Centro">
+        </div>
+
+        <div class="field">
+          <label for="adHome">Você mora em…</label>
+          <input id="adHome" type="text" placeholder="Ex: casa / apartamento (com telas?)">
+        </div>
+
+        <div class="field field--full">
+          <label for="adMsg">Mensagem <span class="muted">(opcional)</span></label>
+          <textarea id="adMsg" rows="5" placeholder="Conte um pouco sobre sua rotina e por que quer adotar."></textarea>
+          <small class="helper">Dica: informe se tem outros animais e se a casa é telada (no caso de gatos).</small>
+        </div>
+
+        <div class="adopt-form__actions">
+          <a class="btn" id="btnAdoptWhats" target="_blank" rel="noopener">
+            Enviar no WhatsApp
+          </a>
+          <a class="btn btn--ghost" href="{{ url_for('public.doacao') }}">
+            Quero ajudar com doação
+          </a>
+        </div>
+      </form>
+    </section>
+
+
+  </div>
+</section>
+
+<script>
+  const wpp = "{{ ong.whatsapp }}";
+
+  // Botões "Adotar [nome]" dos cards
+  document.querySelectorAll("[data-adotar]").forEach(btn => {
+    btn.addEventListener("click", () => {
+      const nome = btn.getAttribute("data-nome");
+      const status = btn.getAttribute("data-status");
+      const text = encodeURIComponent(
+        `Olá! Tenho interesse em adotar o(a) ${nome} (${status}). ` +
+        `Podem me orientar sobre o processo de adoção?`
+      );
+      window.open(`https://wa.me/${wpp}?text=${text}`, "_blank");
+    });
+  });
+
+  // Formulário geral -> WhatsApp
+  const name = document.getElementById("adName");
+  const animal = document.getElementById("adAnimal");
+  const city = document.getElementById("adCity");
+  const home = document.getElementById("adHome");
+  const msg = document.getElementById("adMsg");
+  const btnWpp = document.getElementById("btnAdoptWhats");
+
+  function buildMsg(){
+    const n = name.value.trim() || "Olá";
+    const a = animal.value.trim();
+    const c = city.value.trim() || "(não informado)";
+    const h = home.value.trim() || "(não informado)";
+    const m = msg.value.trim();
+
+    let text = `Olá! Meu nome é ${n} e quero adotar.`;
+    if (a) text += ` Tenho interesse no(a) ${a}.`;
+    text += `\nCidade/Bairro: ${c}`;
+    text += `\nMoradia: ${h}`;
+    if (m) text += `\nMensagem: ${m}`;
+    text += `\n\nPodem me orientar sobre os próximos passos?`;
+
+    return encodeURIComponent(text);
+  }
+
+  function updateLink(){
+    btnWpp.href = `https://wa.me/${wpp}?text=${buildMsg()}`;
+  }
+
+  [name, animal, city, home, msg].forEach(el => el.addEventListener("input", updateLink));
+  updateLink();
+</script>
+
+{% endblock %}

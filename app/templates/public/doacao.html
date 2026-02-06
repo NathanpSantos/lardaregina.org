@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 {% extends "base.html" %}
 {% block content %}
 
@@ -76,3 +77,83 @@
 </script>
 
 {% endblock %}
+=======
+{% extends "base.html" %}
+{% block content %}
+
+<section class="container" style="padding: 26px 0 40px;">
+  <div class="card card--soft">
+    <h1 style="margin:0 0 10px;">Ajude o Lar da Regina com Pix 💛</h1>
+    <p class="muted" style="margin:0 0 18px;">
+      Você pode doar pelo QR Code ou copiar a chave Pix abaixo.
+    </p>
+
+    <div class="grid" style="grid-template-columns: 1fr 1fr; gap:14px;">
+      <!-- QR -->
+      <div class="card">
+        <h2 style="margin:0 0 10px;">QR Code</h2>
+
+        {% if qr_base64 %}
+          <img
+            src="data:image/png;base64,{{ qr_base64 }}"
+            alt="QR Code Pix"
+            style="max-width:260px; width:100%; border-radius:14px; border:1px solid var(--border);"
+          >
+        {% else %}
+          <p class="muted">QR Code ainda não disponível.</p>
+        {% endif %}
+
+        {% if payload %}
+          <p class="muted" style="margin-top:12px;">
+            (Copia e cola Pix também disponível abaixo)
+          </p>
+        {% endif %}
+      </div>
+
+      <!-- Copiar chave -->
+      <div class="card">
+        <h2 style="margin:0 0 10px;">Chave Pix</h2>
+
+        <div class="muted" style="margin-bottom:8px;">CNPJ</div>
+        <div style="font-size:18px; font-weight:900;">{{ pix }}</div>
+
+        <div style="margin-top:14px; display:flex; gap:10px; flex-wrap:wrap;">
+          <button class="btn btn--copy" type="button" id="copyPix">Copiar Pix</button>
+
+          {% if payload %}
+            <button class="btn btn--ghost" type="button" id="copyPayload">Copiar “copia e cola”</button>
+          {% endif %}
+        </div>
+
+        {% if payload %}
+          <textarea id="payload" style="margin-top:12px; width:100%; border-radius:14px; padding:12px; border:1px solid var(--border);" rows="4" readonly>{{ payload }}</textarea>
+        {% endif %}
+
+        <p class="muted" id="msg" style="margin-top:10px;"></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  const msg = document.getElementById("msg");
+
+  function copied(text){
+    msg.textContent = text;
+    setTimeout(() => (msg.textContent = ""), 2500);
+  }
+
+  document.getElementById("copyPix")?.addEventListener("click", async () => {
+    await navigator.clipboard.writeText("{{ pix }}");
+    copied("✅ Chave Pix copiada!");
+  });
+
+  document.getElementById("copyPayload")?.addEventListener("click", async () => {
+    const p = document.getElementById("payload")?.value || "";
+    await navigator.clipboard.writeText(p);
+    copied("✅ Código copia e cola copiado!");
+  });
+</script>
+
+{% endblock %}
+>>>>>>> 821acfce0df8476ea6d7009ab01ba996be0d033d
