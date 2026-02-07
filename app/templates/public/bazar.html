@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% block content %}
+
+<section class="page-hero">
+  <div class="container">
+    <h1>Conheça nosso bazar!</h1>
+    <p>
+      O Bazar do Lar da Regina é mais do que um lugar para comprar roupas e acessórios:
+      cada compra ajuda alimentação, cuidados veterinários e manutenção do abrigo.
+    </p>
+
+    <a class="btn btn--primary" target="_blank" rel="noopener"
+       href="https://wa.me/{{ ong.whatsapp }}?text=Ol%C3%A1!%20Quero%20visitar%20o%20bazar%20do%20Lar%20da%20Regina.%20Pode%20me%20passar%20os%20hor%C3%A1rios%3F">
+      Consulte e visite
+    </a>
+  </div>
+</section>
+
+<section class="container grid-2">
+  <div class="card card--soft">
+    <h2>Sede Administrativa e Bazar</h2>
+    <p class="muted">Como chegar?</p>
+
+    <div class="map-wrap">
+      <!-- Troque pelo seu embed do Google Maps -->
+      <iframe
+        src="https://www.google.com/maps?q=Guarulhos&output=embed"
+        loading="lazy"
+        referrerpolicy="no-referrer-when-downgrade"></iframe>
+    </div>
+
+    <p class="muted" style="margin-top:12px;">
+      Nossa sede administrativa está aberta para visitação conforme disponibilidade.
+      É aqui que também fica o bazar, e toda ajuda se transforma em cuidado.
+    </p>
+  </div>
+
+  <div class="links-box">
+    <h2>Links</h2>
+
+    <a class="link-btn" href="{{ url_for('public.doacao') }}">Vaquinha (Pix) – Doações</a>
+    <a class="link-btn" target="_blank" rel="noopener" href="https://facebook.com/">Curta no Facebook</a>
+    <a class="link-btn" href="{{ url_for('public.adote') }}">Adote um peludinho</a>
+    <a class="link-btn" href="{{ url_for('public.apadrinhamento_lista') }}">Apadrinhamento</a>
+    <a class="link-btn" href="{{ url_for('public.como_ajudar') }}">Necessidades da ONG</a>
+    <a class="link-btn" href="{{ url_for('public.contato') }}">Pontos de arrecadação</a>
+  </div>
+</section>
+
+{% endblock %}
