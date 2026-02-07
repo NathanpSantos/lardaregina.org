@@ -234,8 +234,35 @@ def bazar():
 
 @public_bp.get("/parceiros")
 def parceiros():
-    return render_template("public/parceiros.html")
+    ong = get_ong()
+
+    parceiros = [
+        {"nome": "Cobasi", "logo": "img/parceiros/cobasi.png", "url": "https://www.cobasi.com.br/"},
+        {"nome": "ENIAC", "logo": "img/parceiros/eniac.png", "url": None},
+        {"nome": "Radar", "logo": "img/parceiros/radar.png", "url": None},
+        {"nome": "ENIAC", "logo": "img/parceiros/colegio_bonvenuto.png", "url": None},
+        {"nome": "ENIAC", "logo": "img/parceiros/colegio_geometria.png", "url": None},
+        {"nome": "ENIAC", "logo": "img/parceiros/glasser.png", "url": None},
+        {"nome": "ENIAC", "logo": "img/parceiros/hamburgueria_vira_latas.png", "url": None},
+        {"nome": "ENIAC", "logo": "img/parceiros/eu_sou_bicho.png", "url": None},
+        {"nome": "ENIAC", "logo": "img/parceiros/max_locomition.png", "url": None},
+        {"nome": "ENIAC", "logo": "img/parceiros/premium.png", "url": None},
+        {"nome": "ENIAC", "logo": "img/parceiros/triade.png", "url": None},
+        {"nome": "ENIAC", "logo": "img/parceiros/belas_patas.png", "url": None},
+        {"nome": "ENIAC", "logo": "img/parceiros/arca_h.png", "url": None},
+        {"nome": "ENIAC", "logo": "img/parceiros/ampara.png", "url": None},
+
+
+        
+        
+        # ... adicione os demais
+    ]
+
+    return render_template("public/parceiros.html", ong=ong, parceiros=parceiros)
+
 
 @public_bp.get("/quem-somos")
-def sobre():
-    return render_template("public/sobre.html")
+def quem_somos():
+    ong = get_ong()
+    return render_template("public/quem_somos.html", ong=ong)
+

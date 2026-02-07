@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% block content %}
+
+<section class="partners">
+  <div class="container">
+
+    <header class="partners__head">
+      <span class="partners__badge">🤝 Parcerias que salvam vidas</span>
+      <h1>Torne-se um parceiro!</h1>
+
+      <p class="partners__lead">
+        Cuidar de animais resgatados exige recursos contínuos: alimentação, veterinário,
+        abrigo e manutenção. Empresas parceiras ajudam diretamente a manter nossos serviços,
+        ampliar resgates e acelerar a chance de adoção.
+      </p>
+
+      <div class="partners__cta">
+        <a class="btn" href="{{ url_for('public.contato') }}">Entrar em contato</a>
+        <a class="btn btn--ghost" href="{{ url_for('public.doacao') }}">Doar agora</a>
+      </div>
+    </header>
+
+    <section class="partners__box">
+      <h2>Nossos parceiros</h2>
+      <p class="muted" style="margin-top:8px;">
+        Obrigado a cada empresa e projeto que fortalece nosso trabalho.
+      </p>
+
+      <div class="partners__grid">
+        {% for p in parceiros %}
+          <a class="partner" href="{{ p.url or '#' }}" {% if p.url %}target="_blank" rel="noopener"{% endif %}>
+            <img src="{{ url_for('static', filename=p.logo) }}" alt="{{ p.nome }}">
+          </a>
+        {% endfor %}
+      </div>
+    </section>
+
+  </div>
+</section>
+
+{% endblock %}

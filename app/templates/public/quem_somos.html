@@ -1,0 +1,85 @@
+{% extends "base.html" %}
+{% block content %}
+
+<section class="about">
+  <div class="container">
+
+    <header class="about__head">
+      <span class="about__badge">🐾 Desde 2008 • Guarulhos</span>
+      <h1>Conheça nossa história</h1>
+      <p class="about__subtitle">
+        No Lar da Regina, acreditamos que todo animal merece amor, cuidado e um lar seguro.
+      </p>
+    </header>
+
+    <div class="about__grid">
+      <!-- Texto -->
+      <article class="about__card">
+        <h2>Quem somos</h2>
+
+        <p>
+          Nosso compromisso é proporcionar uma nova chance para os animais que mais precisam,
+          sempre com carinho, respeito e dedicação. Acreditamos na força da comunidade e
+          convidamos você a se juntar a nós nessa causa. Juntos, podemos transformar a vida de
+          muitos cães, oferecendo o cuidado que eles merecem e ajudando-os a encontrar um lar cheio de amor.
+        </p>
+
+        <h3>Nossa origem</h3>
+        <p>
+          A Associação nasceu de um sonho de sua atual Presidente, <strong>Regina Pereira</strong>,
+          que começou em <strong>2008</strong>, na cidade de <strong>Guarulhos</strong>, com a missão de proteger e resgatar
+          cães em situação de risco. O trabalho vai além do resgate: oferecemos alimentação saudável,
+          cuidados veterinários essenciais e buscamos lares responsáveis para cada peludo que passa por nossas mãos.
+        </p>
+
+        <h3>O que fazemos</h3>
+        <ul class="about__list">
+          <li>Resgate e acolhimento de animais em situação de abandono e maus-tratos</li>
+          <li>Atendimento veterinário, tratamentos e acompanhamento</li>
+          <li>Castração e vacinação</li>
+          <li>Cuidados diários: alimentação, higiene e socialização</li>
+          <li>Adoção responsável e apadrinhamento</li>
+        </ul>
+
+        <div class="about__note">
+          <strong>Importante:</strong> Nosso trabalho sobrevive <strong>exclusivamente de doações</strong>.
+          Tudo é feito com muito esforço, dedicação e respeito pela vida.
+        </div>
+
+        <div class="about__cta">
+          <a class="btn" href="{{ url_for('public.doacao') }}">Quero ajudar com doação</a>
+          <a class="btn btn--ghost" href="{{ url_for('public.adote') }}">Quero adotar</a>
+        </div>
+      </article>
+
+      <!-- Lateral -->
+      <aside class="about__side">
+        <div class="about__sideCard">
+          <h3>Resumo</h3>
+          <div class="about__kpis">
+            <div class="about__kpi">
+              <span class="k">Fundação</span>
+              <span class="v">2008</span>
+            </div>
+            <div class="about__kpi">
+              <span class="k">Cidade</span>
+              <span class="v">Guarulhos</span>
+            </div>
+            <div class="about__kpi">
+              <span class="k">Atuação</span>
+              <span class="v">Proteção & Resgate</span>
+            </div>
+          </div>
+        </div>
+
+        <figure class="about__photo">
+          <img src="{{ url_for('static', filename='img/quem-somos.jpg') }}" alt="Lar da Regina - nossa história">
+          <figcaption>“O amor de bicho não tem preço.”</figcaption>
+        </figure>
+      </aside>
+    </div>
+
+  </div>
+</section>
+
+{% endblock %}

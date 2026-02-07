@@ -1,15 +1,16 @@
 {% extends "base.html" %}
 {% block content %}
-<section class="hero-banner">
-  <div class="hero-banner__overlay">
-    <div class="container hero-banner__content">
-      <div class="badge">🐾 Ajuda urgente • Proteção animal</div>
-      <h1>O Lar da Regina precisa de você</h1>
-      <p>Resgatamos, cuidamos e buscamos um recomeço para animais em situação de risco.</p>
+<section class="vaquinha-hero">
+  <div class="vaquinha-hero__overlay">
+    <div class="container vaquinha-hero__content">
 
       <div class="cta">
-        <a class="btn" href="{{ url_for('public.doacao') }}">Doar agora</a>
-        <a class="btn btn--ghost" href="{{ url_for('public.transparencia') }}">Ver transparência</a>
+        <a class="btn btn--vaquinha" href="{{ url_for('public.doacao') }}">
+          Ajude na vaquinha
+        </a>
+        <a class="btn btn--ghost" href="{{ url_for('public.transparencia') }}">
+          Ver transparência
+        </a>
       </div>
     </div>
   </div>
