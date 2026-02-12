@@ -1271,6 +1271,25 @@ body{
   }
 }
 
+.social-link{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  color:#f28c1a;
+  font-weight:600;
+  text-decoration:none;
+  transition:.2s;
+}
+
+.social-link:hover{
+  opacity:.7;
+}
+
+.social-link svg{
+  width:20px;
+  height:20px;
+}
+
 /* =========================
    RESPONSIVO
    ========================= */

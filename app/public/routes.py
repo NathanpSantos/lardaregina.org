@@ -183,7 +183,7 @@ def get_animais_apadrinhamento():
                 "Equipe veterinária: R$ 60,00/mês",
                 "Banho: R$ 30,00/mês",
                 "Antipulgas: R$ 100,00/mês",
-                "Banho terapêutico: R$ 120,00/mês",
+                "Fisioterapia: R$ 120,00/mês",
             ],
             "total": "R$ 316,70/mês",
             "desde": "15/11/2024",

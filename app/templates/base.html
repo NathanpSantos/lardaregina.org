@@ -70,12 +70,16 @@
 
         {% if ong is defined and ong %}
           <p>📲 <a href="https://wa.me/{{ ong.whatsapp }}" target="_blank">WhatsApp</a></p>
-          <p>📸 <a href="https://www.instagram.com/lardaregina/" target="_blank">{{ ong.instagram }}</a></p>
-          <p><strong>Pix:</strong> {{ ong.pix }}</p>
+          <p>
+          <a class="social-link" href="https://www.instagram.com/lardaregina/" target="_blank">
+            <i data-lucide="instagram"></i>Instagram</a></p>
+            <strong>Pix:</strong> {{ ong.pix }}</p>
         {% else %}
           <p>📲 <a href="https://wa.me/5511976187227" target="_blank">WhatsApp</a></p>
-          <p>📸 <a href="https://www.instagram.com/lardaregina/" target="_blank">@lardaregina</a></p>
-          <p><strong>Pix:</strong> 18.294.547/0001-02</p>
+          <p>
+          <a class="social-link" href="https://www.instagram.com/lardaregina/" target="_blank">
+            <i data-lucide="instagram"></i>Instagram</a></p>
+            <p><strong>Pix:</strong> 18.294.547/0001-02</p>
         {% endif %}
       </div>
     </div>
@@ -102,6 +106,9 @@
       }, 4000); // ⏱️ tempo em milissegundos (4 segundos)
     }
   });
+</script>
+<script>
+  lucide.createIcons();
 </script>
 </body>
 </html>
