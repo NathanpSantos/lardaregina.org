@@ -379,5 +379,62 @@
   [name, value, pref].forEach(el => el.addEventListener("input", updateLink));
   updateLink();
 </script>
+<section class="sponsor-form">
+  <div class="sponsor-form__box">
+    <div class="sponsor-form__header">
+      <h2>Formulário de Apadrinhamento</h2>
+      <p><strong>Precisamos de padrinhos e madrinhas!</strong></p>
+      <p>
+        A campanha do apadrinhamento é uma forma de conseguir recursos fixos para manter nossos protegidos com alimentação,
+        vacinas, vermífugos, higiene, veterinário e tudo que for necessário.
+      </p>
+      <p>
+        Você pode contribuir mensalmente com a quantia que puder. Caso não possa continuar, pedimos que nos avise.
+      </p>
+      <p><strong>Para se tornar madrinha ou padrinho, preencha o formulário abaixo:</strong></p>
+    </div>
+
+    <form class="sponsor-form__form" method="POST" action="{{ url_for('public.apadrinhamento_form') }}">
+      <label>Nome Completo:</label>
+      <input type="text" name="nome" placeholder="Digite seu nome..." required>
+
+      <label>E-mail:</label>
+      <input type="email" name="email" placeholder="Digite seu e-mail..." required>
+
+      <label>Telefone/Whatsapp:</label>
+      <input type="text" name="telefone" placeholder="(99) 99999-9999" required>
+
+      <label>Endereço:</label>
+      <input type="text" name="endereco" placeholder="Rua, número, bairro...">
+
+      <label>Cidade/Estado:</label>
+      <input type="text" name="cidade_estado" placeholder="Ex.: Guarulhos/SP">
+
+      <label>Animal(s) escolhido(s):</label>
+      <input type="text" name="animais" placeholder="Ex.: Mel, Thor...">
+
+      <label>Valor da doação mensal:</label>
+      <input type="text" name="valor" placeholder="R$...">
+
+      <label>Dia da doação:</label>
+      <input type="date" name="dia_doacao">
+
+      <label>Forma de pagamento:</label>
+      <div class="sponsor-form__radios">
+        <label><input type="radio" name="pagamento" value="Pix" checked> Pix</label>
+        <label><input type="radio" name="pagamento" value="Transferência"> Transferência</label>
+        <label><input type="radio" name="pagamento" value="PicPay"> PicPay</label>
+      </div>
+
+      <label>No caso de depósito programado, informe o período:</label>
+      <input type="text" name="periodo" placeholder="Ex.: todo dia 10 por 6 meses">
+
+      <label>Comentários:</label>
+      <textarea name="comentarios" rows="4" placeholder="Escreva aqui..."></textarea>
+
+      <button type="submit" class="btn sponsor-form__btn">Enviar</button>
+    </form>
+  </div>
+</section>
 
 {% endblock %}

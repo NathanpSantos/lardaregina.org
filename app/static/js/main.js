@@ -57,3 +57,11 @@
 
   applyFilters();
 
+  document.addEventListener("DOMContentLoaded", () => {
+    const main = document.getElementById("mainPhoto");
+    document.querySelectorAll(".thumb").forEach(btn => {
+      btn.addEventListener("click", () => {
+        main.src = btn.dataset.src;
+      });
+    });
+  });

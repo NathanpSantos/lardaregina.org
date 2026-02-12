@@ -1110,7 +1110,166 @@ body{
   .grid-2{ grid-template-columns: 1fr; }
   .links-box h2{ font-size: 34px; }
 }
+.sponsor-form {
+  padding: 40px 0;
+}
 
+.sponsor-form__box {
+  max-width: 980px;
+  margin: 0 auto;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 2px solid #f3a22d;
+  background: #fff;
+}
+
+.sponsor-form__header {
+  background: #f3a22d;
+  color: #fff;
+  padding: 18px 22px;
+}
+
+.sponsor-form__header h2 {
+  margin: 0 0 10px;
+  font-size: 22px;
+}
+
+.sponsor-form__header p {
+  margin: 6px 0;
+  line-height: 1.4;
+}
+
+.sponsor-form__form {
+  padding: 18px 22px 22px;
+}
+
+.sponsor-form__form label {
+  display: block;
+  margin: 10px 0 6px;
+  font-weight: 600;
+  color: #222;
+}
+
+.sponsor-form__form input,
+.sponsor-form__form textarea {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid #222;
+  border-radius: 3px;
+  outline: none;
+}
+
+.sponsor-form__radios {
+  display: flex;
+  gap: 18px;
+  align-items: center;
+  padding: 8px 0;
+}
+
+.sponsor-form__radios label {
+  margin: 0;
+  font-weight: 500;
+}
+
+.sponsor-form__btn {
+  margin-top: 16px;
+  display: inline-block;
+  padding: 10px 22px;
+  border: 0;
+  border-radius: 4px;
+  background: #e65c2c;
+  color: #fff;
+  cursor: pointer;
+}
+/* =========================
+   FLASH MESSAGES (Flask)
+   ========================= */
+
+.flash-wrap {
+  width: 100%;
+  max-width: 1200px;
+  margin: 20px auto 0 auto;
+  padding: 0 20px;
+}
+
+.flash {
+  padding: 14px 18px;
+  border-radius: 8px;
+  margin-bottom: 12px;
+  font-size: 15px;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  animation: flashFade 0.4s ease;
+}
+
+/* Sucesso */
+.flash--success {
+  background-color: #e9f7ef;
+  color: #1e7e34;
+  border-left: 5px solid #28a745;
+}
+
+.flash--success::before {
+  content: "✅";
+}
+
+/* Erro */
+.flash--danger,
+.flash--error {
+  background-color: #fdecea;
+  color: #a71d2a;
+  border-left: 5px solid #dc3545;
+}
+
+.flash--danger::before,
+.flash--error::before {
+  content: "❌";
+}
+
+/* Aviso */
+.flash--warning {
+  background-color: #fff4e5;
+  color: #8a5a00;
+  border-left: 5px solid #ff9800;
+}
+
+.flash--warning::before {
+  content: "⚠️";
+}
+
+/* Informação */
+.flash--info {
+  background-color: #e7f3ff;
+  color: #084298;
+  border-left: 5px solid #0d6efd;
+}
+
+.flash--info::before {
+  content: "ℹ️";
+}
+
+/* Animação suave */
+@keyframes flashFade {
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Mobile */
+@media (max-width: 600px) {
+  .flash {
+    font-size: 14px;
+    padding: 12px 14px;
+  }
+}
 
 /* =========================
    RESPONSIVO

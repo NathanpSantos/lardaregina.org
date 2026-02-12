@@ -3,7 +3,7 @@ from io import BytesIO
 import qrcode
 from . import public_bp
 from app.utils.pix import gerar_payload_pix
-from flask import render_template, abort
+from flask import render_template, abort, redirect, url_for, flash, request
 
 @public_bp.get("/")
 def home():
@@ -47,6 +47,18 @@ def home():
         instagram_posts=instagram_posts
     )
 
+@public_bp.post("/contato")
+def contato_post():
+    nome = request.form.get("nome")
+    email = request.form.get("email")
+
+    if not nome or not email:
+        flash("Preencha todos os campos obrigatórios.", "warning")
+        return redirect(url_for("public.contato"))
+
+    # aqui você processa/salva/envia email
+    flash("Em breve entraremos em contato 💛", "success")
+    return redirect(url_for("public.contato"))
 
 @public_bp.get("/como-ajudar")
 def como_ajudar():
@@ -70,7 +82,9 @@ def doacao():
     buffer = BytesIO()
     img.save(buffer, format="PNG")
     qr_base64 = base64.b64encode(buffer.getvalue()).decode("utf-8")
-
+   
+    flash("Doação realizada com sucesso! Obrigado 💛", "success")
+    
     return render_template("public/doacao.html", pix=chave_pix, qr_base64=qr_base64, payload=payload)
 
 @public_bp.app_context_processor
@@ -208,6 +222,28 @@ def apadrinhamento_lista():
     ong = get_ong()
     animais = get_animais_apadrinhamento()
     return render_template("public/apadrinhamento_lista.html", ong=ong, animais=animais)
+
+@public_bp.post("/apadrinhamento/form")
+def apadrinhamento_form():
+    # pega dados do form
+    data = {
+        "nome": request.form.get("nome"),
+        "email": request.form.get("email"),
+        "telefone": request.form.get("telefone"),
+        "endereco": request.form.get("endereco"),
+        "cidade_estado": request.form.get("cidade_estado"),
+        "animais": request.form.get("animais"),
+        "valor": request.form.get("valor"),
+        "dia_doacao": request.form.get("dia_doacao"),
+        "pagamento": request.form.get("pagamento"),
+        "periodo": request.form.get("periodo"),
+        "comentarios": request.form.get("comentarios"),
+    }
+
+    # por enquanto: só confirma
+    # (depois a gente salva em banco, planilha, ou manda email)
+    flash("✅ Obrigado! Recebemos seu pedido de apadrinhamento. Em breve entraremos em contato.", "success")
+    return redirect(url_for("public.apadrinhamento_lista"))
 
 @public_bp.get("/apadrinhamento/<slug>")
 def apadrinhamento_detalhe(slug):
