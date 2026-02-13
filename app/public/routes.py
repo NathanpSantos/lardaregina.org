@@ -125,6 +125,7 @@ def adote():
         {"nome": "Jade", "status": "Para adoção", "foto": "img/animais/azeitona.jpg", "tipo": "Cão"},
         {"nome": "Pretinha", "status": "Resgatada", "foto": "img/animais/bebel.jpg", "tipo": "Cão"},
         {"nome": "Thor", "status": "Para adoção", "foto": "img/animais/benjamin.jpg", "tipo": "Cão"},
+
     ]
 
     checklist = [
