@@ -43,72 +43,73 @@
     {% block content %}{% endblock %}
   </main>
 
-  <footer class="footer-main">
-    <div class="footer-container">
-      <div class="footer-brand">
-        <img src="{{ url_for('static', filename='img/logo2.png') }}" alt="Lar da Regina">
-        <p>Associação de Proteção Animal.<br>Resgatando vidas e construindo recomeços.</p>
+  <footer class="footer">
+  <div class="footer__top">
+    <div class="container footer__grid">
+
+      <!-- Marca -->
+      <div class="footer__brand">
+        <img class="footer__logo" src="{{ url_for('static', filename='img/logo2.png') }}" alt="Lar da Regina">
+        <p class="footer__desc">
+          Associação de Proteção Animal.<br>
+          Resgatando vidas e construindo recomeços.
+        </p>
+
+        <div class="footer__social">
+          <a class="icon-btn" href="https://wa.me/{{ ong.whatsapp }}" target="_blank" rel="noopener" aria-label="WhatsApp">
+            <img src="{{ url_for('static', filename='img/icons/whatsapp.svg') }}" alt="">
+          </a>
+
+          <a class="icon-btn" href="https://www.instagram.com/lardaregina/" target="_blank" rel="noopener" aria-label="Instagram">
+            <img src="{{ url_for('static', filename='img/icons/instagram.svg') }}" alt="">
+          </a>
+
+          <a class="icon-btn" href="mailto:contato@lardaregina.org.br" aria-label="E-mail">
+            <img src="{{ url_for('static', filename='img/icons/mail.svg') }}" alt="">
+          </a>
+        </div>
       </div>
 
-      <div class="footer-links">
+      <!-- Institucional -->
+      <div class="footer__col">
         <h4>Institucional</h4>
         <a href="{{ url_for('public.quem_somos') }}">Quem somos</a>
         <a href="{{ url_for('public.transparencia') }}">Transparência</a>
-        <a href="{{ url_for('public.como_ajudar') }}">Como Ajudar</a>
+        <a href="{{ url_for('public.como_ajudar') }}">Como ajudar</a>
       </div>
 
-      <div class="footer-links">
+      <!-- Ações -->
+      <div class="footer__col">
         <h4>Ações</h4>
         <a href="{{ url_for('public.adote') }}">Adote</a>
         <a href="{{ url_for('public.apadrinhamento_lista') }}">Apadrinhamento</a>
         <a href="{{ url_for('public.bazar') }}">Bazar</a>
       </div>
 
-      <div class="footer-contact">
+      <!-- Contato -->
+      <div class="footer__col">
         <h4>Contato</h4>
-        <p>📍 Guarulhos – SP</p>
 
-        {% if ong is defined and ong %}
-          <p>📲 <a href="https://wa.me/{{ ong.whatsapp }}" target="_blank">WhatsApp</a></p>
-          <p>
-          <a class="social-link" href="https://www.instagram.com/lardaregina/" target="_blank">
-            <i data-lucide="instagram"></i>Instagram</a></p>
-            <strong>Pix:</strong> {{ ong.pix }}</p>
-        {% else %}
-          <p>📲 <a href="https://wa.me/5511976187227" target="_blank">WhatsApp</a></p>
-          <p>
-          <a class="social-link" href="https://www.instagram.com/lardaregina/" target="_blank">
-            <i data-lucide="instagram"></i>Instagram</a></p>
-            <p><strong>Pix:</strong> 18.294.547/0001-02</p>
-        {% endif %}
+        <div class="footer__row">
+          <img class="footer__ico" src="{{ url_for('static', filename='img/icons/pin.svg') }}" alt="">
+          <span>Guarulhos – SP</span>
+        </div>
+
+        <div class="footer__row">
+          <img class="footer__ico" src="{{ url_for('static', filename='img/icons/pix.svg') }}" alt="">
+          <span><strong>Pix (CNPJ):</strong> {{ ong.pix }}</span>
+        </div>
+
+        <a class="footer__btn" href="{{ url_for('public.doacao') }}">Doar agora</a>
       </div>
+
     </div>
+  </div>
 
-    <div class="footer-bottom">
-      © 2026 Lar da Regina — CNPJ: 18.294.547/0001-02 • Todos os direitos reservados
+  <div class="footer__bottom">
+    <div class="container footer__bottom-inner">
+      <span>© 2026 Lar da Regina — CNPJ: 18.294.547/0001-02</span>
+      <span>Todos os direitos reservados</span>
     </div>
-  </footer>
-  <script>
-  document.addEventListener("DOMContentLoaded", function () {
-    const flashes = document.querySelectorAll(".flash");
-
-    if (flashes.length > 0) {
-      setTimeout(() => {
-        flashes.forEach(flash => {
-          flash.style.transition = "opacity 0.5s ease, transform 0.5s ease";
-          flash.style.opacity = "0";
-          flash.style.transform = "translateY(-10px)";
-
-          setTimeout(() => {
-            flash.remove();
-          }, 500);
-        });
-      }, 4000); // ⏱️ tempo em milissegundos (4 segundos)
-    }
-  });
-</script>
-<script>
-  lucide.createIcons();
-</script>
-</body>
-</html>
+  </div>
+</footer>
