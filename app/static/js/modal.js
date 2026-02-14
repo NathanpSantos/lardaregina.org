@@ -1,33 +1,26 @@
 document.addEventListener("DOMContentLoaded", () => {
   const modal = document.getElementById("campanhaModal");
+  if (!modal) return;
+
+  // Só na HOME
+  const isHome = window.__IS_HOME__ === true;
+  if (!isHome) return;
+
+  // abre 2s depois
+  setTimeout(() => {
+    if (!modal.open) modal.showModal();
+  }, 2000);
+
   const closeBtn = document.getElementById("campanhaClose");
   const laterBtn = document.getElementById("campanhaLater");
 
-  if (!modal) return;
+  function closeModal(){ modal.close(); }
 
-  // abre 2s depois (premium: não assusta)
-  setTimeout(() => {
-    modal.showModal();
-  }, 2000);
+  closeBtn?.addEventListener("click", (e) => { e.preventDefault(); closeModal(); });
+  laterBtn?.addEventListener("click", closeModal);
 
-  function closeModal(){
-    modal.close();
-  }
-
-  closeBtn?.addEventListener("click", (e) => {
-    e.preventDefault();
-    e.stopPropagation();
-    closeModal();
-  });
-
-  laterBtn?.addEventListener("click", () => closeModal());
-
-  // clicar fora fecha
   modal.addEventListener("click", (e) => {
     const box = modal.querySelector(".campanha-box");
-    if (!box) return;
-    if (!box.contains(e.target)) closeModal();
+    if (box && !box.contains(e.target)) closeModal();
   });
-
-  // ESC já fecha automaticamente pelo dialog
 });
