@@ -8,9 +8,12 @@
 </head>
 <body>
   <dialog id="modal-home">
-    <img src="{{ url_for('static', filename='img/campanha.jpg') }}" alt="Campanha">
+    <a href="https://www.kickante.com.br/vaquinha-online/juntos-por-uma-lar-para-os-100-caes-da-regina"target="_blank"class="modal-link">
+      <img src="{{ url_for('static', filename='img/campanha.jpg') }}" alt="Campanha Lar da Regina">
+    </a>
     <button type="button" id="btn-close" aria-label="Fechar">×</button>
   </dialog>
+
   <header class="header-old">
     <div id="logo-header">
       <a href="{{ url_for('public.home') }}">

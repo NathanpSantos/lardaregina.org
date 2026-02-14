@@ -1536,3 +1536,8 @@ body{
   filter: brightness(1.05);
 }
 
+.modal-link{
+  display:block;
+  cursor:pointer;
+}
+
