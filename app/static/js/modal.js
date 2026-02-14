@@ -5,31 +5,29 @@ document.addEventListener("DOMContentLoaded", () => {
 
   if (!modal) return;
 
-  // 🔥 abre SEMPRE que a página carregar
-  if (window.location.pathname === "/") {
+  // abre 2s depois (premium: não assusta)
+  setTimeout(() => {
     modal.showModal();
-  }
+  }, 2000);
 
-
-
-  function closeModal() {
+  function closeModal(){
     modal.close();
   }
 
   closeBtn?.addEventListener("click", (e) => {
+    e.preventDefault();
     e.stopPropagation();
     closeModal();
   });
 
-  laterBtn?.addEventListener("click", () => {
-    closeModal();
-  });
+  laterBtn?.addEventListener("click", () => closeModal());
 
   // clicar fora fecha
   modal.addEventListener("click", (e) => {
     const box = modal.querySelector(".campanha-box");
     if (!box) return;
-    const clickedOutside = !box.contains(e.target);
-    if (clickedOutside) closeModal();
+    if (!box.contains(e.target)) closeModal();
   });
+
+  // ESC já fecha automaticamente pelo dialog
 });

@@ -7,26 +7,29 @@
   <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
 <body>
-  <!-- Modal Campanha (Profissional) -->
-  <dialog id="campanhaModal" class="campanha-modal" aria-label="Campanha de doação">
-    <div class="campanha-box">
+  <!-- POPUP CAMPANHA (ONG premium) -->
+  <dialog id="campanhaModal" class="campanha-modal" aria-label="Campanha Lar da Regina">
+    <div class="campanha-box" role="document">
+      <button class="campanha-close" id="campanhaClose" aria-label="Fechar">✕</button>
 
-      <button type="button" class="campanha-close" id="campanhaClose" aria-label="Fechar">
-        ×
-      </button>
-
+      <!-- Clique na imagem -> abre Kickante -->
       <a class="campanha-media"
         href="https://www.kickante.com.br/vaquinha-online/juntos-por-uma-lar-para-os-100-caes-da-regina"
         target="_blank" rel="noopener"
         aria-label="Abrir vaquinha no Kickante">
-        <img src="{{ url_for('static', filename='img/campanha.jpg') }}" alt="Campanha Lar da Regina">
+        <img
+          src="{{ url_for('static', filename='img/campanha.jpg') }}"
+          alt="Campanha Lar da Regina - Ajude na vaquinha"
+          loading="eager"
+        >
       </a>
 
       <div class="campanha-content">
         <div class="campanha-badge">🐾 Campanha urgente</div>
-        <h3>Ajude o Lar da Regina</h3>
+        <h3>Um lar para os 100 cães da Regina</h3>
         <p>
-          UM LAR PARA OS 100 CÃES DA REGINA
+          Eles perderam o espaço, mas não podem perder a chance de viver.
+          Sua doação faz diferença agora.
         </p>
 
         <div class="campanha-actions">
@@ -36,21 +39,17 @@
             Doar agora
           </a>
 
-          <button type="button" class="btn btn--ghost" id="campanhaLater">
+          <button class="btn btn--ghost" id="campanhaLater" type="button">
             Agora não
           </button>
         </div>
 
-        <label class="campanha-check">
-          <input type="checkbox" id="campanhaNoMore">
-          Não mostrar novamente hoje
-        </label>
+        <small class="campanha-foot">
+          Você também pode doar via Pix na página “Doação”.
+        </small>
       </div>
-
     </div>
   </dialog>
-
-
   <header class="header-old">
     <div id="logo-header">
       <a href="{{ url_for('public.home') }}">
