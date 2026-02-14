@@ -174,7 +174,7 @@
         `Olá! Tenho interesse em adotar o(a) ${nome} (${status}). ` +
         `Podem me orientar sobre o processo de adoção?`
       );
-      window.open(`https://wa.me/${wpp}?text=${text}`, "_blank");
+      window.open(`https://wa.me/5511976187227${wpp}?text=${text}`, "_blank");
     });
   });
 
@@ -204,7 +204,7 @@
   }
 
   function updateLink(){
-    btnWpp.href = `https://wa.me/${wpp}?text=${buildMsg()}`;
+    btnWpp.href = `https://wa.me/5511976187227${wpp}?text=${buildMsg()}`;
   }
 
   [name, animal, city, home, msg].forEach(el => el.addEventListener("input", updateLink));
