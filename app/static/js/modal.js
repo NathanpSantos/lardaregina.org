@@ -1,15 +1,35 @@
 document.addEventListener("DOMContentLoaded", () => {
-  const modalHome = document.getElementById("modal-home");
-  const buttonClose = document.getElementById("btn-close");
+  const modal = document.getElementById("campanhaModal");
+  const closeBtn = document.getElementById("campanhaClose");
+  const laterBtn = document.getElementById("campanhaLater");
 
-  if (!modalHome || !buttonClose) return;
+  if (!modal) return;
 
-  // abre só uma vez por sessão (opcional)
-  
-  if (!sessionStorage.getItem("modalHomeShown")) {
-    modalHome.showModal();
-    sessionStorage.setItem("modalHomeShown", "1");
+  // 🔥 abre SEMPRE que a página carregar
+  if (window.location.pathname === "/") {
+    modal.showModal();
   }
 
-  buttonClose.addEventListener("click", () => modalHome.close());
+
+
+  function closeModal() {
+    modal.close();
+  }
+
+  closeBtn?.addEventListener("click", (e) => {
+    e.stopPropagation();
+    closeModal();
+  });
+
+  laterBtn?.addEventListener("click", () => {
+    closeModal();
+  });
+
+  // clicar fora fecha
+  modal.addEventListener("click", (e) => {
+    const box = modal.querySelector(".campanha-box");
+    if (!box) return;
+    const clickedOutside = !box.contains(e.target);
+    if (clickedOutside) closeModal();
+  });
 });

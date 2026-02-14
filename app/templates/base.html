@@ -7,12 +7,49 @@
   <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
 <body>
-  <dialog id="modal-home">
-    <a href="https://www.kickante.com.br/vaquinha-online/juntos-por-uma-lar-para-os-100-caes-da-regina"target="_blank"class="modal-link">
-      <img src="{{ url_for('static', filename='img/campanha.jpg') }}" alt="Campanha Lar da Regina">
-    </a>
-    <button type="button" id="btn-close" aria-label="Fechar">×</button>
+  <!-- Modal Campanha (Profissional) -->
+  <dialog id="campanhaModal" class="campanha-modal" aria-label="Campanha de doação">
+    <div class="campanha-box">
+
+      <button type="button" class="campanha-close" id="campanhaClose" aria-label="Fechar">
+        ×
+      </button>
+
+      <a class="campanha-media"
+        href="https://www.kickante.com.br/vaquinha-online/juntos-por-uma-lar-para-os-100-caes-da-regina"
+        target="_blank" rel="noopener"
+        aria-label="Abrir vaquinha no Kickante">
+        <img src="{{ url_for('static', filename='img/campanha.jpg') }}" alt="Campanha Lar da Regina">
+      </a>
+
+      <div class="campanha-content">
+        <div class="campanha-badge">🐾 Campanha urgente</div>
+        <h3>Ajude o Lar da Regina</h3>
+        <p>
+          Sua doação ajuda com ração, tratamentos e um novo espaço para os animais.
+        </p>
+
+        <div class="campanha-actions">
+          <a class="btn btn--vaquinha"
+            href="https://www.kickante.com.br/vaquinha-online/juntos-por-uma-lar-para-os-100-caes-da-regina"
+            target="_blank" rel="noopener">
+            Doar agora
+          </a>
+
+          <button type="button" class="btn btn--ghost" id="campanhaLater">
+            Agora não
+          </button>
+        </div>
+
+        <label class="campanha-check">
+          <input type="checkbox" id="campanhaNoMore">
+          Não mostrar novamente hoje
+        </label>
+      </div>
+
+    </div>
   </dialog>
+
 
   <header class="header-old">
     <div id="logo-header">
@@ -64,15 +101,15 @@
 
         <div class="footer__social">
           <a class="icon-btn" href="https://wa.me/{{ ong.whatsapp }}" target="_blank" rel="noopener" aria-label="WhatsApp">
-            <img src="{{ url_for('static', filename='img/icons/whatsapp.svg') }}" alt="">
+            <img src="{{ url_for('static', filename='img/icons/whatsapp.png') }}" alt="">
           </a>
 
           <a class="icon-btn" href="https://www.instagram.com/lardaregina/" target="_blank" rel="noopener" aria-label="Instagram">
-            <img src="{{ url_for('static', filename='img/icons/instagram.svg') }}" alt="">
+            <img src="{{ url_for('static', filename='img/icons/instagram.png') }}" alt="">
           </a>
 
           <a class="icon-btn" href="mailto:contato@lardaregina.org.br" aria-label="E-mail">
-            <img src="{{ url_for('static', filename='img/icons/mail.svg') }}" alt="">
+            <img src="{{ url_for('static', filename='img/icons/mail.png') }}" alt="">
           </a>
         </div>
       </div>
@@ -98,12 +135,12 @@
         <h4>Contato</h4>
 
         <div class="footer__row">
-          <img class="footer__ico" src="{{ url_for('static', filename='img/icons/pin.svg') }}" alt="">
+          <img class="footer__ico" src="{{ url_for('static', filename='img/icons/pin.png') }}" alt="">
           <span>Guarulhos – SP</span>
         </div>
 
         <div class="footer__row">
-          <img class="footer__ico" src="{{ url_for('static', filename='img/icons/pix.svg') }}" alt="">
+          <img class="footer__ico" src="{{ url_for('static', filename='img/icons/pix.png') }}" alt="">
           <span><strong>Pix (CNPJ):</strong> {{ ong.pix }}</span>
         </div>
 
